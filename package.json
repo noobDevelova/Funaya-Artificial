@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "tailwind": "tailwindcss -i public/assets/css/tailwind.css -o public/assets/css/tailwind.output.css",
+    "build": "env NODE_ENV=production postcss public/assets/css/tailwind.css -o public/assets/css/tailwind.output.css",
+    "cz": "git-cz",
+    "release": "release-it"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.16"
+  }
+}
