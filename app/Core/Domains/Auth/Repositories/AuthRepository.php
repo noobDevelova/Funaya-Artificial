@@ -2,26 +2,26 @@
 
 namespace App\Core\Domains\Auth\Repositories;
 
-use App\Core\Domains\Auth\Entities\UserEntities;
-use App\Core\Domains\Auth\Repositories\Model\UserModel;
+use App\Core\Domains\Auth\Entities\AuthEntities;
+use App\Core\Domains\Auth\Repositories\Model\AuthModel;
 
 class AuthRepository
 {
-    protected $user_model;
+    protected $authModel;
 
     public function __construct()
     {
-        $this->user_model = new UserModel();
+        $this->authModel = new AuthModel();
     }
 
     public function findByEmail(string $email)
     {
-        $user_data = $this->user_model->getUserByEmail($email);
+        $user_data = $this->authModel->getUserByEmail($email);
 
         if (!$user_data) {
             return null;
         }
 
-        return new UserEntities((array) $user_data);
+        return new AuthEntities((array) $user_data);
     }
 }

@@ -24,17 +24,21 @@ class AuthController extends BaseController
             'title' => 'Login - Admin | ' . $ENV_ADAPTER->getAppName(),
         ];
 
+        if (session()->get('isLoggedIn')) {
+            return redirect()->to('/admin/');
+        }
+
         if ($this->request->getMethod() === 'POST') {
             $email = $this->request->getPost('email');
             $password = $this->request->getPost('password');
 
             try {
-                $user = $this->auth_use_case->login($email, $password);
+                $user = $this->auth_use_case->authenticate($email, $password);
 
                 session()->set([
                     'id' => $user->id,
                     'username' => $user->username,
-                    'role' => $user->role,
+                    'role' => $user->role_name,
                     'isLoggedIn' => true
                 ]);
 
@@ -55,6 +59,6 @@ class AuthController extends BaseController
         session()->remove('isLoggedIn');
         session()->destroy();
 
-        return redirect()->to('/admin/login');
+        return redirect()->to('admin/auth/login');
     }
 }

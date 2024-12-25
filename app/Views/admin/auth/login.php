@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
-                    <form class="w-full" action="<?= site_url('admin/login') ?>" method="POST">
+                    <form class="w-full" action="<?= site_url('admin/auth/login') ?>" method="POST">
                         <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
                             Welcome Admin!
                         </h1>
