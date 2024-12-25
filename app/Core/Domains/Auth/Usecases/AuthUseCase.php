@@ -14,7 +14,7 @@ class AuthUseCase
         $this->auth_repository = $authRepository;
     }
 
-    public function login(string $email, string $password)
+    public function authenticate(string $email, string $password)
     {
         $user = $this->auth_repository->findByEmail($email);
 
