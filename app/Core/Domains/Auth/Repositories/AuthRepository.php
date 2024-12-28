@@ -5,7 +5,13 @@ namespace App\Core\Domains\Auth\Repositories;
 use App\Core\Domains\Auth\Entities\AuthEntities;
 use App\Core\Domains\Auth\Repositories\Model\AuthModel;
 
-class AuthRepository
+interface AuthRepositoryInterface
+{
+    public function findByEmail(string $email): ?AuthEntities;
+    public function updateLastLogin(int $userId): bool;
+}
+
+class AuthRepository implements AuthRepositoryInterface
 {
     protected $authModel;
 
@@ -14,7 +20,7 @@ class AuthRepository
         $this->authModel = new AuthModel();
     }
 
-    public function findByEmail(string $email)
+    public function findByEmail(string $email): ?AuthEntities
     {
         $user_data = $this->authModel->getUserByEmail($email);
 
@@ -23,5 +29,10 @@ class AuthRepository
         }
 
         return new AuthEntities((array) $user_data);
+    }
+
+    public function updateLastLogin(int $userId): bool
+    {
+        return $this->authModel->update($userId, ['last_login' => date('Y-m-d H:i:s')]);
     }
 }

@@ -9,7 +9,6 @@ class AuthEntities
     public $email;
     public $password;
     public $role_id;
-    public $role_name;
     public $last_login;
 
     public function __construct(array $data = [])
@@ -19,7 +18,6 @@ class AuthEntities
         $this->email = $data['email'] ?? null;
         $this->password = $data['password'] ?? null;
         $this->role_id = $data['role_id'] ?? null;
-        $this->role_name = $data['role_name'] ?? null;
         $this->last_login = $data['last_login'] ?? null;
     }
 }
