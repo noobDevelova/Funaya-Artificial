@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/tailwind.output.css?v=1.0">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/form.css?v=1.0">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="<?= base_url() ?>assets/js/init-alpine.js"></script>
 </head>
@@ -26,22 +27,38 @@
 
                 <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
                     <form class="w-full" action="<?= site_url('admin/auth/login') ?>" method="POST">
+                        <?= csrf_field() ?>
+
                         <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
                             Welcome Admin!
                         </h1>
 
                         <label class="block text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Email</span>
+
                             <input
                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                placeholder="Jane Doe" name="email" type="email" required />
+                                placeholder="Jane Doe" name="email" type="email" value="<?= old('email') ?>" required />
+
+                            <?php if (isset($validation) && $validation->getError('email')): ?>
+                            <span class="text-xs text-red-600 dark:text-red-400">
+                                <?= $validation->getError('email'); ?>
+                            </span>
+                            <?php endif; ?>
                         </label>
 
                         <label class="block mt-4 text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Password</span>
+
                             <input
                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                 placeholder="***************" name="password" type="password" required />
+
+                            <?php if (isset($validation) && $validation->getError('password')): ?>
+                            <span class="text-xs text-red-600 dark:text-red-400">
+                                <?= $validation->getError('password'); ?>
+                            </span>
+                            <?php endif; ?>
                         </label>
 
                         <button type="submit"

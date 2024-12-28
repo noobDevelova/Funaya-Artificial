@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Core\Domains\Auth\Entities;
+namespace App\Core\Domains\User\Entities;
 
-class AuthEntities
+class UserEntities
 {
     public $id;
     public $username;
