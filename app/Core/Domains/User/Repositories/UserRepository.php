@@ -2,61 +2,25 @@
 
 namespace App\Core\Domains\User\Repositories;
 
-use App\Core\Domains\User\Repositories\Model\UserModel;
-use App\Core\Domains\User\Entities\UserEntities;
+use App\Core\Domains\User\DTOs\Frame\UserRequest;
+use App\Core\Domains\User\DTOs\Frame\UserResponse;
+use App\Core\Shared\Exception\BaseException;
+use App\Core\Shared\Http\BaseListParams;
+use App\Core\Shared\Http\BaseListResponse;
 
-interface UserRepositoryInterface
+interface UserRepository
 {
-    public function createEmployee(array $data): ?UserEntities;
+    public function getUsers(BaseListParams $params): BaseListResponse;
 
-    public function hashPassword(string $password): string;
+    public function getRoles(): BaseListResponse;
 
-    public function getAllEmployees(int $limit, int $offset): array;
+    public function createUser(UserRequest $request): bool|BaseException;
 
-    public function countEmployees(): int;
+    public function getUserById(int $id): UserResponse | BaseException;
 
-    public function deleteEmployee(int $userId): bool;
-}
+    public function updateUser(UserRequest $request): bool|BaseException;
 
-class UserRepository implements UserRepositoryInterface
-{
-    protected $userModel;
+    public function toggleActiveUser(int $id): bool|BaseException;
 
-    public function __construct()
-    {
-        $this->userModel = new UserModel();
-    }
-
-    public function createEmployee(array $data): ?UserEntities
-    {
-        $data['role_id'] = 2;
-
-        $this->userModel->insert($data);
-
-        return new UserEntities($data);
-    }
-
-    public function hashPassword(string $password): string
-    {
-        return password_hash($password, PASSWORD_DEFAULT);
-    }
-
-    public function getAllEmployees(int $limit, int $offset): array
-    {
-        $employees = $this->userModel->getEmployees($limit, $offset);
-
-        return array_map(function ($employee) {
-            return new UserEntities($employee);
-        }, $employees);
-    }
-
-    public function countEmployees(): int
-    {
-        return $this->userModel->countEmployees();
-    }
-
-    public function deleteEmployee(int $userId): bool
-    {
-        return $this->userModel->deleteEmployee($userId);
-    }
+    public function deleteUser(int $id): bool|BaseException;
 }

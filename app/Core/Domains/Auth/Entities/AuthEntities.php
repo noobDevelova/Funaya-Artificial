@@ -4,14 +4,14 @@ namespace App\Core\Domains\Auth\Entities;
 
 class AuthEntities
 {
-    public $id;
-    public $username;
-    public $email;
-    public $password;
-    public $role_id;
-    public $last_login;
+    public ?int $id;
+    public ?string $username;
+    public ?string $email;
+    public ?string $password;
+    public ?int $role_id;
+    public ?string $last_login;
 
-    public function __construct(array $data = [])
+    public function __construct(array $data)
     {
         $this->id = $data['id'] ?? null;
         $this->username = $data['username'] ?? null;

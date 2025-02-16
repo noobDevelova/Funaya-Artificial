@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: ["./app/Views/**/*.php"],
+  darkMode: ["selector", '[data-mode="dark"]'],
   theme: {
     colors: {
       transparent: "transparent",
