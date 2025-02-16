@@ -11,37 +11,66 @@ class AuthFilters implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         $session = session();
-        $path = $request->getUri()->getPath();
+        $path = rtrim($request->getUri()->getPath(), '/');
 
-        // Rute untuk guest (misalnya login, register)
         $guestRoutes = [
-            'admin/auth/login',
+            '/auth/login',
         ];
 
-        // Rute publik (misalnya dashboard, halaman umum)
-        $publicRoutes = [
-            'admin/dashboard',
+        $protectedRoutes = [
+            '/*',
+            '/employee/*',
+            '/products/*',
+            '/categories/*',
         ];
 
-        // Cek apakah pengguna sudah login (periksa session)
         $isLoggedIn = $session->get('isLoggedIn');
 
-        // Jika user sudah login dan mencoba mengakses halaman login, arahkan ke halaman dashboard
         if ($isLoggedIn && in_array($path, $guestRoutes)) {
-            return redirect()->to('/admin/dashboard');
+            return redirect()->to('/');
         }
 
-        // Jika user belum login dan mencoba mengakses halaman terproteksi, arahkan ke login page
-        if (!$isLoggedIn && !in_array($path, $guestRoutes) && !in_array($path, $publicRoutes)) {
-            return redirect()->to('/admin/auth/login');
+        if (!$isLoggedIn && $this->isProtectedRoute($path, $protectedRoutes)) {
+            return redirect()->to('/auth/login');
         }
 
-        // Jika rute valid, lanjutkan ke rute berikutnya
+        if (!$this->isValidRoute($path, $guestRoutes, $protectedRoutes)) {
+            return redirect()->to('/404');
+        }
+
         return null;
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
         // TODO
+    }
+
+    private function isProtectedRoute($path, $protectedRoutes)
+    {
+        $normalizedPath = rtrim($path, '/');
+
+        foreach ($protectedRoutes as $route) {
+            $normalizedRoute = rtrim($route, '/');
+
+            if (substr($normalizedRoute, -2) === '/*') {
+                $baseRoute = rtrim(substr($normalizedRoute, 0, -2), '/');
+
+                if (strpos($normalizedPath, $baseRoute) === 0) {
+                    return true;
+                }
+            } else {
+                if ($normalizedPath === $normalizedRoute) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function isValidRoute($path, $guestRoutes, $protectedRoutes)
+    {
+        return in_array($path, $guestRoutes) || $this->isProtectedRoute($path, $protectedRoutes);
     }
 }
